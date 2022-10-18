@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=pass123
+      - xpack.license.self_generated.type=trial
+      - xpack.security.enabled=true
+      - xpack.monitoring.collection.enabled=true
+    ulimits:
+      # Swapping needs to be disabled for performance and node stability
+      # (see: https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - test-network
+  elastic-setup:
+    build:
+      context: ./
+      dockerfile: elastic-setup/Dockerfile
+    image: elastic-setup
+    depends_on:
+      - elasticsearch
+    networks:
+      - test-network
+networks:
+  test-network:

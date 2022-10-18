@@ -1,0 +1,29 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: ElasticsearchQuery.yaml
+spec:
+  flows:
+    - route:
+        from:
+          uri: timer:yaml_dsl
+          steps:
+            - setHeader:
+                name: Content-Type
+                expression:
+                  simple:
+                    expression: application/json
+            - setBody:
+                expression:
+                  simple:
+                    expression: '{{myQuery}}'
+            - toD:
+                uri: >-
+                  elasticsearch-rest://elasticsearch?enableSSL=false&operation=SEARCH&indexName=test&hostAddresses=localhost%3A9200
+            - marshal:
+                json:
+                  library: jackson
+            - log:
+                message: From YAML DSL ${body}
+          parameters:
+            period: '60000'

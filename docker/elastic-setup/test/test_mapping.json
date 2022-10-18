@@ -1,0 +1,16 @@
+{
+    "mappings": {
+        "dynamic": "false",
+        "_meta": { },
+        "_source": {
+            "includes": [ ],
+            "excludes": [ ]
+        },
+        "dynamic_templates": [ ],
+        "properties": {
+            "entry": {
+                "type": "keyword"
+            }
+        }
+    }
+}
